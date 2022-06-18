@@ -1,7 +1,7 @@
 ---
 layout: default
 title: options
-parent : Examples
+parent : Guide
 nav_order: 2
 has_children: true
 ---
