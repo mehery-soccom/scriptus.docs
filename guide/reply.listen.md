@@ -1,12 +1,13 @@
 ---
 layout: default
-title: listen()
-parent : Guide
+title: $.reply.listen()
+parent : $.reply()
+grand_parent : Guide
 nav_order: 2
 has_children: true
 ---
 ## listen
-- Sets the next handler for message
+- Sets the handler for next message from User, with more options to handover to multiple handlers based on conditions.
 
 ### Wild-Card listner
 ```javascript
