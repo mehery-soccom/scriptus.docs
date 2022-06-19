@@ -9,7 +9,7 @@ has_children: true
 - Prepares make http calls to 3rd party url
 {:toc}
 
-## $.rest(options)
+## $.rest ( options )
 *  options.url - <font size="2"> end point URL to be hit</font>
 *  options.headers <font size="1"> (optional)</font> - <font size="2">http headers to to passed </font>
 
@@ -21,7 +21,7 @@ has_children: true
       }
     });
 ```
-### get(query)
+### get ( query )
 <font size="2">It will execute prepared request with <i>GET</i> method</font>
   *  query - <font size="2"> query params</font>
 
@@ -33,7 +33,7 @@ has_children: true
     });
 ```
 
-### post(json)
+### post ( json )
 <font size="2">It will execute prepared request with <i>POST</i> method with <i>application/json</i> request body</font>
   *  json - <font size="2"> json body</font>
 
@@ -44,7 +44,7 @@ has_children: true
       region : 'Africa'
     });
 ```
-### submit(fields)
+### submit ( fields )
 <font size="2">It will execute prepared request with <i>POST</i> method with <i>application/x-www-form-urlencoded</i></font>
   *  fields - <font size="2"> map with fields values</font>
 
@@ -56,7 +56,7 @@ has_children: true
     });
 ```
 
-### json(handler)
+### json ( handler )
 <font size="2">Parse response as json and hand it over to handler</font>
   *  handler - <font size="2"> handler method</font>
 

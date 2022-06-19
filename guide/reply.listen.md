@@ -6,11 +6,11 @@ grand_parent : Guide
 nav_order: 2
 has_children: true
 ---
-## listen(conditions)
+## listen ( conditions... )
 - Sets the handler for next message from User, with more options to handover to multiple handlers based on conditions.
 {:toc}
 
-### listen(defaultHandler)
+### listen ( defaultHandler )
 *  defaultHandler - <font size="2"> default handler for user response</font>
 ```javascript
     $.reply({
@@ -20,7 +20,7 @@ has_children: true
     }).listen(postCredit);
 ```
 
-### listen(conditions)
+### listen ( conditions... )
 *  condition.text <font size="1"> (optional)</font> - <font size="2">Match Exact Text </font>
 *  condition.code <font size="1"> (optional)</font> - <font size="2">Match Button Code </font>
 *  condition.pattern <font size="1"> (optional)</font> - <font size="2">Match with regex </font>
