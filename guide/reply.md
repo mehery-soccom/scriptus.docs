@@ -55,5 +55,5 @@ $.reply({
 
 ### listen(condtions)
 *  handler - <font size="2"> same as next() but with more options, can handover to multiple handlers based on conditions</font>
-*   [See options](reply.listen.html)
+*   [See condtions params](reply.listen.html)
 

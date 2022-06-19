@@ -6,10 +6,12 @@ grand_parent : Guide
 nav_order: 2
 has_children: true
 ---
-## listen
+## listen(conditions)
 - Sets the handler for next message from User, with more options to handover to multiple handlers based on conditions.
+{:toc}
 
-### Wild-Card listner
+### listen(defaultHandler)
+*  defaultHandler - <font size="2"> default handler for user response</font>
 ```javascript
     $.reply({
       text :  {
@@ -17,8 +19,14 @@ has_children: true
        }
     }).listen(postCredit);
 ```
-### Match Based listner
-#### Match Exact Text
+
+### listen(conditions)
+*  condition.text <font size="1"> (optional)</font> - <font size="2">Match Exact Text </font>
+*  condition.code <font size="1"> (optional)</font> - <font size="2">Match Button Code </font>
+*  condition.pattern <font size="1"> (optional)</font> - <font size="2">Match with regex </font>
+*  condition.handler - <font size="2"> handler for user response<</font>
+
+####  Match Exact Text
 ```javascript
   $.reply({
     text :  {
@@ -33,7 +41,7 @@ has_children: true
   },otherHandle); // If answer is none of the above, this is default handler
 
 ```
-#### Match Text Pattern
+#### Match with regex
 ```javascript
   $.reply({
     text :  {
