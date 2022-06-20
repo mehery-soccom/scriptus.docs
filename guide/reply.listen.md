@@ -1,6 +1,6 @@
 ---
 layout: default
-title: $.reply.listen()
+title: $.reply().listen()
 parent : $.reply()
 grand_parent : Guide
 nav_order: 2
