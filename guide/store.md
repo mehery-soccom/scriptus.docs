@@ -25,19 +25,3 @@ async function myChanedMethod(){
     console.log(key1,key2);
 }
 ```
-
-## $.store.data ( ...keys )
-glbal variables can be read using this api
-```javascript
-function myChanedMethod(){
-    return $.store.global('key1','key2').then(function({key1,key2}){
-      console.log(key1,key2);
-    });
-}
-/// Alternativly
-
-async function myChanedMethod(){
-    let { key1 ,key2} = await $.store.global('key1','key2');
-    console.log(key1,key2);
-}
-```
