@@ -1,56 +1,62 @@
 ---
 layout: default
-title: $.route()
+title: $.session()
 parent : Guide
-nav_order: 2
+nav_order: 3
 has_children: true
 ---
-# Route Session
-- Sesison can be routed between multiple apps using *QueueCodes* 
-- Note - this is short-cut to $.session.route
+# Session Api's
+- Method exposed trigger session apis'
 {:toc}
 
 
-## $.route ( options )
+## $.session.close ()
+Closes the session and session will start from defautl assigned queue next time
+```javascript
+function myHandler(){
+    return $.session.close();
+}
+```
+## $.session.route ( options )
 Sesison can be switched between multiple apps using routing api by providing *QueueCodes*
 *  options.queue - <font size="2"> Target Queue where convesation should swith to.</font>
 *  options.team <font size="1"> (optional)</font> - <font size="2">works only if options.queue is agent type </font>
 *  options.agent <font size="1"> (optional)</font> - <font size="2">works only if options.queue is agent type </font>
 
 ```javascript
-$.route({
+$.session.route({
   queue : "my_other_bot",
   params : {
     //Additonal params to send to next app
   }
 });
 ```
-### $.route.to.queue ( queueCode, params )
+### $.session.route.to.queue ( queueCode, params )
 ```javascript
-$.route.to.queue("my_agent_app");
+$.session.route.to.queue("my_agent_app");
 
 // Is short-cut for
-$.route({
+$.session.route({
     queue : "my_other_bot",
 });
 ```
 
-### $.route.to.team ( teamCode )
+### $.session.route.to.team ( teamCode )
 ```javascript
-$.route.to.team("my_team_code");
+$.session.route.to.team("my_team_code");
 
 // Is short-cut for
-$.route({
+$.session.route({
     queue : "agent_desk", //Default agent queue
     team : "my_team_code"
 });
 ```
-### $.route.to.agent ( agentCode )
+### $.session.route.to.agent ( agentCode )
 ```javascript
-$.route.to.agent("my_agent_code");
+$.session.route.to.agent("my_agent_code");
 
 // Is short-cut for
-$.route({
+$.session.route({
     queue : "agent_desk", //Default agent queue
     agent : "my_agent_code"
 });
