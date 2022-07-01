@@ -25,3 +25,30 @@ async function myChanedMethod(){
     console.log(key1,key2);
 }
 ```
+
+## $.store.local ( ...keys )
+local variables can be read using this api
+```javascript
+async function myChanedMethod(){
+    let { key1 ,key2} = await $.store.local('key1','key2');
+    console.log(key1,key2);
+}
+```
+
+## $.store.local.set ( key, value )
+local variable can be stored using this api
+```javascript
+async function myChanedMethod(){
+    let key1 = await $.store.local.set('key1',"My Variable Value");
+    console.log(key1);
+}
+```
+
+## $.store.local.get ( key )
+local variable can be read using this api
+```javascript
+async function myChanedMethod(){
+    let key1 = await $.store.local.get('key1');
+    console.log(key1);
+}
+```
