@@ -22,6 +22,35 @@ $.reply({
 });
 ```
 
+### message.options.buttons
+*  message.options <font size="1"> (optional)</font> - <font size="2">Provide reply options to User </font>
+
+#### message.options.buttons.text
+```javascript
+$.reply({
+    text :  {
+      body : "Hi, I am good how are you?"
+     },
+     options : {
+       buttons : [ "Good", "Bad" ] //Pass text as options
+     }
+});
+```
+#### message.options.buttons.code
+```javascript
+$.reply({
+    text :  {
+      body : "Hi, I am good how are you?"
+     },
+     options : {
+       buttons : [
+        { code : "good", label : "Good" },
+        { code : "bad", label : "Bad" }
+      ] //Pass text as options
+     }
+});
+```
+
 ### message.template
 *  message.template.code - <font size="2">Template code defined in Admin panel</font>
 *  message.template.data <font size="1"> (optional)</font> - <font size="2">Data to be used in template</font>
@@ -97,35 +126,6 @@ $.reply({
     "filename": "your-audio-caption",
     "link": "http(s)://the-url"
   }
-});
-```
-
-### message.options.buttons
-*  message.options <font size="1"> (optional)</font> - <font size="2">Provide reply options to User </font>
-
-#### message.options.buttons.text
-```javascript
-$.reply({
-    text :  {
-      body : "Hi, I am good how are you?"
-     },
-     options : {
-       buttons : [ "Good", "Bad" ] //Pass text as options
-     }
-});
-```
-#### message.options.buttons.code
-```javascript
-$.reply({
-    text :  {
-      body : "Hi, I am good how are you?"
-     },
-     options : {
-       buttons : [
-        { code : "good", label : "Good" },
-        { code : "bad", label : "Bad" }
-      ] //Pass text as options
-     }
 });
 ```
 
