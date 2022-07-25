@@ -9,6 +9,10 @@ has_children: true
 - Prepares make API calls to wit service
 {:toc}
 
+## Setup
+1. Login to AdminPanel and go to Token & Keys &#8594; Add Variable
+1. Add WIT.ai token and save.
+
 ### $.wit()
 ```javascript
 ///Chained Pattern
