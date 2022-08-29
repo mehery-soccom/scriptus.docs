@@ -61,3 +61,14 @@ $.session.route({
     agent : "my_agent_code"
 });
 ```
+
+### $.session.route.to.skills ( skill_1, skill_2, skill3, ...skills_n )
+```javascript
+$.session.route.to.skills("orthos","dental");
+
+// Is short-cut for
+$.session.route({
+    queue : "agent_desk", //Default agent queue
+    skills : ["orthos","dental"]
+});
+```

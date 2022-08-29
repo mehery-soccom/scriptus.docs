@@ -4,6 +4,7 @@ title: $.route()
 parent : Guide
 nav_order: 2
 has_children: true
+nav_exclude: true
 ---
 # Route Session
 - Sesison can be routed between multiple apps using *QueueCodes* 
