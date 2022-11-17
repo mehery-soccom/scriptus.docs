@@ -10,6 +10,9 @@ has_children: true
 {:toc}
 
 
+- Details
+  - Reply message to connected User
+
 ## $.reply ( message )
 *  message.text - <font size="2"> text reply to user</font>
 
@@ -129,10 +132,10 @@ $.reply({
 });
 ```
 
-### next ( handler )
+### .next ( handler )
 *  handler - <font size="2"> handler responsible for handling next message from user</font>
 
-### listen ( condtions )
+### .listen ( condtions, ...)
 *  handler - <font size="2"> same as next() but with more options, can handover to multiple handlers based on conditions</font>
-*   [See condtions params](reply.listen.html)
+*   [$.reply({...}).listen({},...)](listen.html)
 
