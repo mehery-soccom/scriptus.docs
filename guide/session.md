@@ -72,3 +72,52 @@ $.session.route({
     skills : ["orthos","dental"]
 });
 ```
+
+## $.session.feedback ( options )
+Save sesison feedback.
+*  options.score - <font size="2"></font>
+*  options.tag - <font size="2"></font>
+*  options.review - <font size="2"></font>
+
+```javascript
+$.session.feedback({
+  score : 5.0
+});
+```
+
+### $.session.feedback.set.score ( value )
+```javascript
+$.session.feedback.set.score(5.0);
+
+// Is short-cut for
+$.session.feedback({
+    score : 5.0
+});
+```
+
+### $.session.feedback.set.tag ( value )
+```javascript
+$.session.feedback.set.tag("good");
+
+// Is short-cut for
+$.session.feedback({
+    tag : "good"
+});
+```
+
+### $.session.feedback.set.review ( value )
+```javascript
+$.session.feedback.set.review("It was very helpful");
+
+// Is short-cut for
+$.session.feedback({
+    review : "It was very helpful"
+});
+```
+
+## $.session.app.config ( options )
+Get your app config.
+
+```javascript
+$.session.app.config();
+```
