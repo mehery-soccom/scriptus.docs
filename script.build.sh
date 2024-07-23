@@ -7,8 +7,10 @@ curl --cacert temp/ssl/cert.pem https://api.mehery.io/xms/v2/api-docs?group=late
 cat server-xms/api-docs-raw.json | jq > server-xms/api-docs.json
 rm server-xms/api-docs-raw.json
 
-node spectacle/bin/spectacle  server-xms/api-docs.json -t server-xms/public -f index.html 
+echo "bin/spectacle"
+node bin/spectacle  server-xms/api-docs.json -t server-xms/public -f index.html
 
+echo "widdershins"
 widdershins --summary server-xms/api-docs.json -o reslate/source/index.md \
 --language_tabs 'shell:Shell' 'http:HTTP' 'javascript:JS'  'python:Python' 'ruby:Ruby'  'php:PHP' 'java:Java'  'go:Go' 'csharp:C#'
 
