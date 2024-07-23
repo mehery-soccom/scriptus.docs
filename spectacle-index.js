@@ -6,7 +6,7 @@
 
 
 
-console.log("sssssssssss",__dirname);
+//console.log("sssssssssss",__dirname);
 
 
 var fs = require('fs'),
@@ -53,8 +53,8 @@ function resolveOptions(options) {
  **/
 module.exports = function (options) {
 
-    options.developmentModeLive = true;
-    options.developmentMode = true;
+    //options.developmentModeLive = true;
+    //options.developmentMode = true;
 
     var opts = resolveOptions(options)
 
@@ -133,7 +133,7 @@ module.exports = function (options) {
     grunt.registerTask('foundation', ['sass:foundation_scss', 'concat:foundation_css']) // 'concat:foundation_js'
     grunt.registerTask('default', ['stylesheets', 'javascripts', 'foundation', 'templates'])
     grunt.registerTask('server', ['connect'])
-    //grunt.registerTask('develop', ['server', 'watch'])
+    grunt.registerTask('develop', ['server', 'watch'])
 
     // Reload template data when watch files change
     grunt.event.on('watch', function() {

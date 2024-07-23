@@ -11,8 +11,11 @@ echo "bin/spectacle"
 node bin/spectacle  server-xms/api-docs.json -t server-xms/public -f index.html
 
 echo "widdershins"
+mkdir -p reslate/source
 widdershins --summary server-xms/api-docs.json -o reslate/source/index.md \
 --language_tabs 'shell:Shell' 'http:HTTP' 'javascript:JS'  'python:Python' 'ruby:Ruby'  'php:PHP' 'java:Java'  'go:Go' 'csharp:C#'
+
+#exit
 
 cd reslate
 npm i

@@ -2,7 +2,7 @@
 
 var program = require('commander'),
     package = require('../package'),
-    spectacle = require('../index.js')
+    spectacle = require('../spectacle-index.js')
 
 //
 //= Process CLI input
