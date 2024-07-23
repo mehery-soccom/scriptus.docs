@@ -1,0 +1,3 @@
+[submodule "spectacle"]
+	path = spectacle
+	url = git@github.com:lnt/spectacle.git
