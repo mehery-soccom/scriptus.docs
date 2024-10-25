@@ -1,14 +1,12 @@
 ---
 layout: default
-title: $.schedule()
+title: $.schedule
 parent : Guide
 nav_order: 13
 has_children: true
 ---
 # Organisation-Schedule APIs
-- To access your organisation's schedule details
-{:toc}
-
+- To access your organisation's schedule details {:toc}
 
 ## $.schedule.isOn ( scheduleName )
 Check whether the schedule is On.
