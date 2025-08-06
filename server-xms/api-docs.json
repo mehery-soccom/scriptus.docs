@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "All the requests are required to be authorized using an API Key authentication. \n Adding *x-api-key* in the header with your unique API Key as a value will grant access.\n To get your *x-api-key* [visit documentation](/server-xms/)",
-    "version": "1.0 - 2024-07-23 08:29 UTC",
+    "version": "1.0 - 2025-08-06 06:15 UTC",
     "title": "Messaging APIs",
     "termsOfService": "Terms of service",
     "contact": {},
@@ -31,6 +31,18 @@
       "description": "Inbound Request (Webhooks) can be used for:\n* Inbound Message Notifications: Use it to get a notification you when you have received a message.\n* Message Status Notifications: Monitor the status of sent messages.\nWebhook must be implemented by client and should be available on public internet"
     },
     {
+      "name": "Media",
+      "description": "API's to upload Media"
+    },
+    {
+      "name": "MoEngage APIs",
+      "description": "API's to MoEngage"
+    },
+    {
+      "name": "Native API's Proxy",
+      "description": "Use Native Structure for Channel API's"
+    },
+    {
       "name": "Outbound Messages",
       "description": "API's to send OutBound Messages"
     },
@@ -47,7 +59,7 @@
     "/api/moengage/v1/message/send": {
       "post": {
         "tags": [
-          "Outbound Messages"
+          "MoEngage APIs"
         ],
         "summary": "Send Message",
         "description": "${swagger.MoengageApi.sendMessage.description}",
@@ -486,6 +498,96 @@
         ]
       }
     },
+    "/api/v1/create/campaign": {
+      "post": {
+        "tags": [
+          "Outbound Messages"
+        ],
+        "summary": "Create Campaign ",
+        "description": "${swagger.OutboundApiV1.createCampaign.description}",
+        "operationId": "createCampaignUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "campaignTitle",
+            "in": "query",
+            "description": "campaignTitle",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "templateCode",
+            "in": "query",
+            "description": "templateCode",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "campaignMode",
+            "in": "query",
+            "description": "campaignMode",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "AGENT",
+              "BOT",
+              "DEFAULT"
+            ]
+          },
+          {
+            "name": "channelId",
+            "in": "query",
+            "description": "channelId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse«CampaignDto,object»"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      }
+    },
     "/api/v1/data/push": {
       "post": {
         "tags": [
@@ -618,6 +720,72 @@
         ]
       }
     },
+    "/api/v1/message/push": {
+      "post": {
+        "tags": [
+          "Outbound Messages"
+        ],
+        "summary": "Send Message",
+        "description": "Use the message API to push text messages, media, documents, and message templates to your customers\nYou can push messages by making a POST call regardless of message type. The content of the JSON message body differs for each type of message (text, image, etc.).",
+        "operationId": "pushMessageUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "message",
+            "description": "message",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApiOutBoundMsg"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse«OutBoundReciept,object»"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      }
+    },
     "/api/v1/message/receive": {
       "post": {
         "tags": [
@@ -694,7 +862,7 @@
             "description": "message",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/OutBoundMsg"
+              "$ref": "#/definitions/ApiOutBoundMsg"
             }
           },
           {
@@ -1002,6 +1170,627 @@
           }
         ]
       }
+    },
+    "/api/v1/view/campaign": {
+      "get": {
+        "tags": [
+          "Outbound Messages"
+        ],
+        "summary": "View Campaign ",
+        "description": "${swagger.OutboundApiV1.viewCampaign.description}",
+        "operationId": "viewCampaignUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "campaignTitle",
+            "in": "query",
+            "description": "campaignTitle",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "templateCode",
+            "in": "query",
+            "description": "templateCode",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "campaignMode",
+            "in": "query",
+            "description": "campaignMode",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "AGENT",
+              "BOT",
+              "DEFAULT"
+            ]
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse«CampaignDto,object»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      }
+    },
+    "/channel/{channelId}/**": {
+      "get": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API",
+        "description": "Use the message API to send text messages, media, documents, and message templates to your customers\nYou can send messages by making a POST call regardless of message type. The content of the JSON message body differs for each type of message (text, image, etc.).",
+        "operationId": "notiveUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "channelId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API",
+        "description": "Use the message API to send text messages, media, documents, and message templates to your customers\nYou can send messages by making a POST call regardless of message type. The content of the JSON message body differs for each type of message (text, image, etc.).",
+        "operationId": "notiveUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "channelId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API",
+        "description": "Use the message API to send text messages, media, documents, and message templates to your customers\nYou can send messages by making a POST call regardless of message type. The content of the JSON message body differs for each type of message (text, image, etc.).",
+        "operationId": "notiveUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "channelId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API",
+        "description": "Use the message API to send text messages, media, documents, and message templates to your customers\nYou can send messages by making a POST call regardless of message type. The content of the JSON message body differs for each type of message (text, image, etc.).",
+        "operationId": "notiveUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "description": "channelId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      }
+    },
+    "/integration/{key}/**": {
+      "get": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API for Token",
+        "operationId": "integrationUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API for Token",
+        "operationId": "integrationUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API for Token",
+        "operationId": "integrationUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Native API's Proxy"
+        ],
+        "summary": "Native proxy API for Token",
+        "operationId": "integrationUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "API Key",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "x-api-id",
+            "in": "header",
+            "description": "API Id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MapModel"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "X_API_KEY": []
+          }
+        ]
+      }
     }
   },
   "securityDefinitions": {
@@ -1062,6 +1851,152 @@
       },
       "title": "ApiFieldError"
     },
+    "ApiOutBoundMsg": {
+      "type": "object",
+      "required": [
+        "channelId",
+        "contacts",
+        "location",
+        "mask",
+        "to",
+        "type"
+      ],
+      "properties": {
+        "activity": {
+          "type": "object"
+        },
+        "audio": {
+          "$ref": "#/definitions/OutBoundMsgMedia"
+        },
+        "campaignId": {
+          "type": "string",
+          "example": "campaignId",
+          "description": "campaign",
+          "enum": [
+            "Represents the details associated with a specific campaign"
+          ]
+        },
+        "channelId": {
+          "type": "string",
+          "example": "91SERVICENUMBER",
+          "description": "The ID that identifies the channel over which the message should be sent."
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CommonMsgContactCard"
+          }
+        },
+        "document": {
+          "$ref": "#/definitions/OutBoundMsgMedia"
+        },
+        "image": {
+          "$ref": "#/definitions/OutBoundMsgMedia"
+        },
+        "location": {
+          "$ref": "#/definitions/CommonMsgLocation"
+        },
+        "mask": {
+          "type": "boolean",
+          "example": false,
+          "description": "Mask the outgoing message data"
+        },
+        "messageIdResend": {
+          "type": "string",
+          "example": "gBEGkYiEB1VXAglK1ZEqA1YKPrU",
+          "description": "Messsage to be resent"
+        },
+        "options": {
+          "$ref": "#/definitions/CommonMsgOptions"
+        },
+        "push": {
+          "type": "object"
+        },
+        "style": {
+          "type": "object"
+        },
+        "template": {
+          "$ref": "#/definitions/CommonTemplateMeta"
+        },
+        "text": {
+          "$ref": "#/definitions/OutBoundMsgText"
+        },
+        "timeout": {
+          "$ref": "#/definitions/MessageTimeout"
+        },
+        "to": {
+          "description": "Either a channel-specific identifier for the receiver (e.g. MSISDN for SMS or WhatsApp channels), or email.",
+          "$ref": "#/definitions/OutBoundContact"
+        },
+        "type": {
+          "type": "string",
+          "example": "text",
+          "description": "message-type",
+          "enum": [
+            "audio",
+            "document",
+            "image",
+            "location",
+            "system",
+            "text",
+            "video",
+            "voice",
+            "contacts",
+            "template",
+            "optin",
+            "optout"
+          ]
+        },
+        "video": {
+          "$ref": "#/definitions/OutBoundMsgMedia"
+        }
+      },
+      "title": "ApiOutBoundMsg"
+    },
+    "ApiPagination": {
+      "type": "object",
+      "required": [
+        "lastPage",
+        "nextPageUrl",
+        "pageNo",
+        "pageSize",
+        "prevPageUrl",
+        "sortBy",
+        "sortDir",
+        "total"
+      ],
+      "properties": {
+        "lastPage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "nextPageUrl": {
+          "type": "string"
+        },
+        "pageNo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "prevPageUrl": {
+          "type": "string"
+        },
+        "sortBy": {
+          "type": "string"
+        },
+        "sortDir": {
+          "type": "string"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "ApiPagination"
+    },
     "ApiResponse«Attachment,object»": {
       "type": "object",
       "required": [
@@ -1075,15 +2010,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1129,6 +2067,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1149,6 +2090,9 @@
             "$ref": "#/definitions/Attachment"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1165,6 +2109,12 @@
         "traceid": {
           "type": "string"
         },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
         "warningKey": {
           "type": "string"
         },
@@ -1176,6 +2126,136 @@
         }
       },
       "title": "ApiResponse«Attachment,object»"
+    },
+    "ApiResponse«CampaignDto,object»": {
+      "type": "object",
+      "required": [
+        "data",
+        "details",
+        "error",
+        "errors",
+        "exception",
+        "extra",
+        "logs",
+        "message",
+        "messageKey",
+        "meta",
+        "pagination",
+        "params",
+        "path",
+        "query",
+        "redirectUrl",
+        "results",
+        "serverVersion",
+        "status",
+        "statusKey",
+        "timestamp",
+        "traceid",
+        "traces",
+        "warningKey",
+        "warnings"
+      ],
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/CampaignDto"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "error": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiFieldError"
+          }
+        },
+        "exception": {
+          "type": "string"
+        },
+        "extra": {
+          "type": "object"
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "type": "string",
+          "example": "This is success message in plain english"
+        },
+        "messageKey": {
+          "type": "string",
+          "example": "MESSAGE_SUCCESS:MOBILE:12"
+        },
+        "meta": {
+          "type": "object"
+        },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
+        "params": {
+          "type": "object"
+        },
+        "path": {
+          "type": "string",
+          "example": "/postman/email/send"
+        },
+        "query": {
+          "type": "object"
+        },
+        "redirectUrl": {
+          "type": "string",
+          "example": "/go/to/some/other/url.html"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CampaignDto"
+          }
+        },
+        "serverVersion": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "example": 200
+        },
+        "statusKey": {
+          "type": "string",
+          "example": "SUCCESS"
+        },
+        "timestamp": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1541276788518
+        },
+        "traceid": {
+          "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "warningKey": {
+          "type": "string"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiFieldError"
+          }
+        }
+      },
+      "title": "ApiResponse«CampaignDto,object»"
     },
     "ApiResponse«ClientApp,object»": {
       "type": "object",
@@ -1190,15 +2270,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1244,6 +2327,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1264,6 +2350,9 @@
             "$ref": "#/definitions/ClientApp"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1279,6 +2368,12 @@
         },
         "traceid": {
           "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "warningKey": {
           "type": "string"
@@ -1305,15 +2400,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1359,6 +2457,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1379,6 +2480,9 @@
             "$ref": "#/definitions/CompanyVarsConfigDoc"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1394,6 +2498,12 @@
         },
         "traceid": {
           "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "warningKey": {
           "type": "string"
@@ -1420,15 +2530,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1474,6 +2587,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1494,6 +2610,9 @@
             "$ref": "#/definitions/DigitalEventDto"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1509,6 +2628,12 @@
         },
         "traceid": {
           "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "warningKey": {
           "type": "string"
@@ -1535,15 +2660,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1589,6 +2717,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1609,6 +2740,9 @@
             "$ref": "#/definitions/DigitalObjectDto"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1624,6 +2758,12 @@
         },
         "traceid": {
           "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "warningKey": {
           "type": "string"
@@ -1650,15 +2790,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1704,6 +2847,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1724,6 +2870,9 @@
             "$ref": "#/definitions/HSMTemplateDoc"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1739,6 +2888,12 @@
         },
         "traceid": {
           "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "warningKey": {
           "type": "string"
@@ -1765,15 +2920,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1819,6 +2977,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1839,6 +3000,9 @@
             "$ref": "#/definitions/OutBoundReciept"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1854,6 +3018,12 @@
         },
         "traceid": {
           "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "warningKey": {
           "type": "string"
@@ -1880,15 +3050,18 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "params",
         "path",
         "query",
         "redirectUrl",
         "results",
+        "serverVersion",
         "status",
         "statusKey",
         "timestamp",
         "traceid",
+        "traces",
         "warningKey",
         "warnings"
       ],
@@ -1934,6 +3107,9 @@
         "meta": {
           "type": "object"
         },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
+        },
         "params": {
           "type": "object"
         },
@@ -1954,6 +3130,9 @@
             "$ref": "#/definitions/OutboxMessage"
           }
         },
+        "serverVersion": {
+          "type": "string"
+        },
         "status": {
           "type": "string",
           "example": 200
@@ -1969,6 +3148,12 @@
         },
         "traceid": {
           "type": "string"
+        },
+        "traces": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "warningKey": {
           "type": "string"
@@ -1988,6 +3173,7 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "results",
         "status",
         "statusKey",
@@ -2005,6 +3191,9 @@
         },
         "meta": {
           "type": "object"
+        },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
         },
         "results": {
           "type": "array",
@@ -2037,6 +3226,7 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "results",
         "status",
         "statusKey",
@@ -2054,6 +3244,9 @@
         },
         "meta": {
           "type": "object"
+        },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
         },
         "results": {
           "type": "array",
@@ -2086,6 +3279,7 @@
         "message",
         "messageKey",
         "meta",
+        "pagination",
         "results",
         "status",
         "statusKey",
@@ -2103,6 +3297,9 @@
         },
         "meta": {
           "type": "object"
+        },
+        "pagination": {
+          "$ref": "#/definitions/ApiPagination"
         },
         "results": {
           "type": "array",
@@ -2153,9 +3350,12 @@
       "type": "object",
       "required": [
         "attachmentId",
+        "drive",
         "mediaCaption",
         "mediaCode",
         "mediaId",
+        "mediaIdExt",
+        "mediaIdInline",
         "mediaMimeType",
         "mediaName",
         "mediaSrc",
@@ -2171,6 +3371,11 @@
           "example": "23m234233232323",
           "description": "Unique Attachment Id"
         },
+        "drive": {
+          "type": "string",
+          "example": "Drive02",
+          "description": "Drive Code"
+        },
         "mediaCaption": {
           "type": "string",
           "example": "Transaction Receipt",
@@ -2183,8 +3388,18 @@
         },
         "mediaId": {
           "type": "string",
-          "example": 12,
+          "example": "23m234233232323",
           "description": "Media ID generated by Service"
+        },
+        "mediaIdExt": {
+          "type": "string",
+          "example": "23m234233232323ext",
+          "description": "Media ID generated by Channel"
+        },
+        "mediaIdInline": {
+          "type": "string",
+          "example": "23m234233232323inline",
+          "description": "Media ID used by Message for inline/part of body content"
         },
         "mediaMimeType": {
           "type": "string",
@@ -2263,6 +3478,38 @@
       },
       "title": "BasicExternalTemplate"
     },
+    "CampaignDto": {
+      "type": "object",
+      "required": [
+        "campaignId",
+        "campaignMode",
+        "campaignTitle",
+        "channelId",
+        "contactType",
+        "templateCode"
+      ],
+      "properties": {
+        "campaignId": {
+          "type": "string"
+        },
+        "campaignMode": {
+          "$ref": "#/definitions/Enum"
+        },
+        "campaignTitle": {
+          "type": "string"
+        },
+        "channelId": {
+          "type": "string"
+        },
+        "contactType": {
+          "type": "string"
+        },
+        "templateCode": {
+          "type": "string"
+        }
+      },
+      "title": "CampaignDto"
+    },
     "ChatMessageDTO": {
       "type": "object",
       "required": [
@@ -2270,16 +3517,20 @@
         "attachments",
         "bulkSessionId",
         "contact",
+        "form",
         "logs",
         "messageId",
         "messageIdExt",
         "messageIdRef",
+        "messageIdResend",
+        "messageTimestamp",
+        "messageTrail",
         "meta",
         "name",
         "options",
+        "referral",
         "replyId",
         "replyIdExt",
-        "replyTo",
         "route",
         "sender",
         "sessionId",
@@ -2289,6 +3540,7 @@
         "template",
         "templateId",
         "text",
+        "timeout",
         "timestamp",
         "type",
         "vccards"
@@ -2307,7 +3559,10 @@
           "type": "string"
         },
         "contact": {
-          "$ref": "#/definitions/Contactable"
+          "$ref": "#/definitions/ContactDTO"
+        },
+        "form": {
+          "type": "object"
         },
         "logs": {
           "type": "array",
@@ -2324,6 +3579,16 @@
         "messageIdRef": {
           "type": "string"
         },
+        "messageIdResend": {
+          "type": "string"
+        },
+        "messageTimestamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "messageTrail": {
+          "type": "string"
+        },
         "meta": {
           "type": "object"
         },
@@ -2333,14 +3598,14 @@
         "options": {
           "type": "object"
         },
+        "referral": {
+          "$ref": "#/definitions/MessageReferral"
+        },
         "replyId": {
           "type": "string"
         },
         "replyIdExt": {
           "type": "string"
-        },
-        "replyTo": {
-          "type": "object"
         },
         "route": {
           "$ref": "#/definitions/MessageRouter"
@@ -2373,6 +3638,9 @@
         "text": {
           "type": "string"
         },
+        "timeout": {
+          "$ref": "#/definitions/MessageTimeout"
+        },
         "timestamp": {
           "type": "integer",
           "format": "int64"
@@ -2389,6 +3657,94 @@
       },
       "title": "ChatMessageDTO"
     },
+    "ChatProfileDTO": {
+      "type": "object",
+      "required": [
+        "code",
+        "contactId",
+        "email",
+        "id",
+        "labels",
+        "mobile",
+        "name",
+        "profileId",
+        "userId"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "contactId": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomerLabel"
+          }
+        },
+        "mobile": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "profileId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "title": "ChatProfileDTO"
+    },
+    "ChronoScheduler": {
+      "type": "object",
+      "required": [
+        "data",
+        "endAt",
+        "interval",
+        "repeat",
+        "repeatCount",
+        "startAt",
+        "taskId",
+        "topic"
+      ],
+      "properties": {
+        "data": {
+          "type": "object"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "string"
+        },
+        "repeat": {
+          "type": "boolean"
+        },
+        "repeatCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "taskId": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        }
+      },
+      "title": "ChronoScheduler"
+    },
     "ClientApp": {
       "type": "object",
       "required": [
@@ -2398,18 +3754,25 @@
         "appMode",
         "appType",
         "config",
+        "customApp",
+        "disabled",
+        "feedbackApp",
         "forward",
         "id",
         "key",
         "keyName",
         "keyVersion",
+        "preDefinedBot",
         "props",
         "queue",
         "readOnly",
         "secret",
         "shared",
+        "timeOutPossible",
         "type",
-        "webhook"
+        "version",
+        "webhook",
+        "webhookApp"
       ],
       "properties": {
         "agentApp": {
@@ -2430,6 +3793,15 @@
         "config": {
           "type": "object"
         },
+        "customApp": {
+          "type": "boolean"
+        },
+        "disabled": {
+          "type": "boolean"
+        },
+        "feedbackApp": {
+          "type": "boolean"
+        },
         "forward": {
           "type": "string"
         },
@@ -2444,6 +3816,9 @@
         },
         "keyVersion": {
           "type": "string"
+        },
+        "preDefinedBot": {
+          "type": "boolean"
         },
         "props": {
           "type": "object"
@@ -2460,11 +3835,21 @@
         "shared": {
           "type": "boolean"
         },
+        "timeOutPossible": {
+          "type": "boolean"
+        },
         "type": {
           "type": "string"
         },
+        "version": {
+          "type": "integer",
+          "format": "int64"
+        },
         "webhook": {
           "type": "string"
+        },
+        "webhookApp": {
+          "type": "boolean"
         }
       },
       "title": "ClientApp"
@@ -2566,7 +3951,8 @@
       "type": "object",
       "required": [
         "buttonDisplayScheme",
-        "buttons"
+        "buttons",
+        "style"
       ],
       "properties": {
         "buttonDisplayScheme": {
@@ -2584,6 +3970,9 @@
           "items": {
             "$ref": "#/definitions/TmplElement"
           }
+        },
+        "style": {
+          "type": "string"
         }
       },
       "title": "CommonMsgOptions"
@@ -2632,9 +4021,13 @@
         "description",
         "disabled",
         "domain",
+        "empty",
         "group",
         "id",
         "key",
+        "missing",
+        "present",
+        "primary",
         "server",
         "shared",
         "type",
@@ -2650,6 +4043,9 @@
         "domain": {
           "type": "string"
         },
+        "empty": {
+          "type": "boolean"
+        },
         "group": {
           "type": "string"
         },
@@ -2658,6 +4054,15 @@
         },
         "key": {
           "type": "string"
+        },
+        "missing": {
+          "type": "boolean"
+        },
+        "present": {
+          "type": "boolean"
+        },
+        "primary": {
+          "type": "boolean"
         },
         "server": {
           "type": "string"
@@ -2700,6 +4105,147 @@
       },
       "title": "ContactBusinessProfile"
     },
+    "ContactDTO": {
+      "type": "object",
+      "required": [
+        "channelType",
+        "contactType",
+        "country",
+        "createdBy",
+        "createdStamp",
+        "csid",
+        "emailVerified",
+        "filters",
+        "firstInBoundStamp",
+        "firstOutBoundStamp",
+        "keymap",
+        "labelId",
+        "lane",
+        "lastInBoundStamp",
+        "lastOptInStamp",
+        "lastOutBoundStamp",
+        "lastPushStamp",
+        "lastReplyStamp",
+        "phoneVerified",
+        "prefix",
+        "profile",
+        "profilePic",
+        "sessionId",
+        "tenant",
+        "userid"
+      ],
+      "properties": {
+        "channelType": {
+          "type": "string"
+        },
+        "contactId": {
+          "type": "string",
+          "example": "wa919876543210"
+        },
+        "contactType": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "csid": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "example": "John.Doe@company.co"
+        },
+        "emailVerified": {
+          "type": "boolean"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Map«string,object»"
+          }
+        },
+        "firstInBoundStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "firstOutBoundStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "keymap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Map«string,string»"
+          }
+        },
+        "labelId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lane": {
+          "type": "string"
+        },
+        "lastInBoundStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "lastOptInStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "lastOutBoundStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "lastPushStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "lastReplyStamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "phone": {
+          "type": "string",
+          "example": 919876543210
+        },
+        "phoneVerified": {
+          "type": "boolean"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "profile": {
+          "$ref": "#/definitions/ChatProfileDTO"
+        },
+        "profilePic": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "tenant": {
+          "type": "string"
+        },
+        "userid": {
+          "type": "string"
+        }
+      },
+      "title": "ContactDTO"
+    },
     "ContactInfoUpdate": {
       "type": "object",
       "properties": {
@@ -2737,17 +4283,12 @@
       "type": "object",
       "required": [
         "channelType",
-        "contactId",
         "contactType",
         "country",
         "csid",
-        "email",
-        "filter",
+        "filters",
         "keymap",
         "lane",
-        "lang",
-        "name",
-        "phone",
         "prefix",
         "tenant",
         "userid"
@@ -2757,7 +4298,8 @@
           "type": "string"
         },
         "contactId": {
-          "type": "string"
+          "type": "string",
+          "example": "wa919876543210"
         },
         "contactType": {
           "type": "string"
@@ -2769,9 +4311,10 @@
           "type": "string"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "example": "John.Doe@company.co"
         },
-        "filter": {
+        "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Map«string,object»"
@@ -2786,201 +4329,13 @@
         "lane": {
           "type": "string"
         },
-        "lang": {
-          "type": "string",
-          "enum": [
-            "AB",
-            "AE",
-            "AF",
-            "AK",
-            "AM",
-            "AN",
-            "AR",
-            "AS",
-            "AV",
-            "AY",
-            "AZ",
-            "BA",
-            "BE",
-            "BG",
-            "BH",
-            "BI",
-            "BM",
-            "BN",
-            "BO",
-            "BR",
-            "BS",
-            "CA",
-            "CE",
-            "CH",
-            "CO",
-            "CR",
-            "CS",
-            "CU",
-            "CV",
-            "CY",
-            "DA",
-            "DE",
-            "DV",
-            "DZ",
-            "EE",
-            "EL",
-            "EN",
-            "EO",
-            "ES",
-            "ET",
-            "EU",
-            "FA",
-            "FF",
-            "FI",
-            "FJ",
-            "FO",
-            "FR",
-            "FY",
-            "GA",
-            "GD",
-            "GL",
-            "GN",
-            "GU",
-            "GV",
-            "HA",
-            "HI",
-            "HO",
-            "HR",
-            "HT",
-            "HU",
-            "HY",
-            "HZ",
-            "IA",
-            "IN",
-            "IE",
-            "IG",
-            "II",
-            "IK",
-            "IO",
-            "IS",
-            "IT",
-            "IU",
-            "IW",
-            "JA",
-            "JI",
-            "JV",
-            "KA",
-            "KG",
-            "KI",
-            "KJ",
-            "KK",
-            "KL",
-            "KM",
-            "KN",
-            "KO",
-            "KR",
-            "KS",
-            "KU",
-            "KV",
-            "KW",
-            "KY",
-            "LA",
-            "LB",
-            "LG",
-            "LI",
-            "LN",
-            "LO",
-            "LT",
-            "LU",
-            "LV",
-            "MG",
-            "MH",
-            "MI",
-            "MK",
-            "ML",
-            "MN",
-            "MO",
-            "MR",
-            "MS",
-            "MT",
-            "MY",
-            "NA",
-            "NB",
-            "ND",
-            "NE",
-            "NG",
-            "NL",
-            "NN",
-            "NO",
-            "NR",
-            "NV",
-            "NY",
-            "OC",
-            "OJ",
-            "OM",
-            "OR",
-            "OS",
-            "PA",
-            "PI",
-            "PL",
-            "PS",
-            "PT",
-            "QU",
-            "RM",
-            "RN",
-            "RO",
-            "RU",
-            "RW",
-            "SA",
-            "SC",
-            "SD",
-            "SE",
-            "SG",
-            "SI",
-            "SK",
-            "SL",
-            "SM",
-            "SN",
-            "SO",
-            "SQ",
-            "SR",
-            "SS",
-            "ST",
-            "SU",
-            "SV",
-            "SW",
-            "TA",
-            "TE",
-            "TG",
-            "TH",
-            "TI",
-            "TK",
-            "TL",
-            "PH",
-            "TN",
-            "TO",
-            "TR",
-            "TS",
-            "TT",
-            "TW",
-            "TY",
-            "UG",
-            "UK",
-            "UR",
-            "UZ",
-            "VE",
-            "VI",
-            "VO",
-            "WA",
-            "WO",
-            "XH",
-            "YO",
-            "ZA",
-            "ZH",
-            "ZU"
-          ]
-        },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "John Doe"
         },
         "phone": {
-          "type": "string"
+          "type": "string",
+          "example": 919876543210
         },
         "prefix": {
           "type": "string"
@@ -3172,6 +4527,40 @@
       },
       "title": "DigitalObjectLink"
     },
+    "Enum": {
+      "type": "object",
+      "title": "Enum"
+    },
+    "FormReply": {
+      "type": "object",
+      "required": [
+        "reply_desc",
+        "reply_id",
+        "reply_json",
+        "reply_title"
+      ],
+      "properties": {
+        "reply_desc": {
+          "type": "string",
+          "description": "Button Description"
+        },
+        "reply_id": {
+          "type": "string",
+          "example": "ACCEPT",
+          "description": "Button Code"
+        },
+        "reply_json": {
+          "type": "object",
+          "description": "JSON Collection of all input selections by customer in form"
+        },
+        "reply_title": {
+          "type": "string",
+          "example": "I Accept",
+          "description": "Button Title"
+        }
+      },
+      "title": "FormReply"
+    },
     "HSMTemplateDoc": {
       "type": "object",
       "required": [
@@ -3179,6 +4568,7 @@
         "attachments",
         "body",
         "category",
+        "categorySubType",
         "categoryType",
         "code",
         "contactType",
@@ -3194,8 +4584,10 @@
         "model",
         "name",
         "options",
+        "readonly",
         "template",
-        "title"
+        "title",
+        "tptinfo"
       ],
       "properties": {
         "approved": {
@@ -3214,6 +4606,9 @@
           "type": "string"
         },
         "category": {
+          "type": "string"
+        },
+        "categorySubType": {
           "type": "string"
         },
         "categoryType": {
@@ -3262,11 +4657,20 @@
         "options": {
           "type": "object"
         },
+        "readonly": {
+          "type": "boolean"
+        },
         "template": {
           "type": "string"
         },
         "title": {
           "type": "string"
+        },
+        "tptinfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TptInfo"
+          }
         }
       },
       "title": "HSMTemplateDoc"
@@ -3373,12 +4777,20 @@
         "contactId",
         "eventCode",
         "eventId",
+        "messageId",
+        "messageTimestamp",
         "route",
         "session",
         "sessionAssigned",
+        "sessionBulkId",
         "sessionId",
+        "sessionIds",
         "sessionRouted",
-        "trace"
+        "timeout",
+        "timestamp",
+        "trace",
+        "triggerType",
+        "type"
       ],
       "properties": {
         "checksum": {
@@ -3391,12 +4803,17 @@
           "type": "string"
         },
         "eventCode": {
-          "type": "string",
-          "example": "SESSION_ROUTED",
-          "description": "Event Triggered by App/Service"
+          "type": "string"
         },
         "eventId": {
           "type": "string"
+        },
+        "messageId": {
+          "type": "string"
+        },
+        "messageTimestamp": {
+          "type": "integer",
+          "format": "int64"
         },
         "route": {
           "$ref": "#/definitions/MessageRouter"
@@ -3407,17 +4824,63 @@
         "sessionAssigned": {
           "$ref": "#/definitions/SessionAssigned"
         },
+        "sessionBulkId": {
+          "type": "string"
+        },
         "sessionId": {
           "type": "string"
         },
+        "sessionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "sessionRouted": {
           "$ref": "#/definitions/SessionRouted"
+        },
+        "timeout": {
+          "$ref": "#/definitions/MessageTimeout"
+        },
+        "timestamp": {
+          "type": "integer",
+          "format": "int64"
         },
         "trace": {
           "type": "array",
           "items": {
             "type": "object"
           }
+        },
+        "triggerType": {
+          "type": "string",
+          "example": "MESSAGE",
+          "description": "Bound Type of Event Triggered by App/Service",
+          "enum": [
+            "MESSAGE",
+            "ACTION",
+            "STATUS",
+            "SYSTEM",
+            "TIMEOUT"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "example": "SESSION_ROUTED",
+          "description": "Event Triggered by App/Service",
+          "enum": [
+            "SESSION_ROUTED",
+            "SESSION_INIT",
+            "SESSION_CLOSED",
+            "SESSION_STATUS",
+            "SESSION_ASSIGNED",
+            "CONTACT_UPDATE",
+            "MESSAGE_INBOUND",
+            "MESSAGE_OUTBOUND",
+            "REPLY_TIMEOUT",
+            "INBOUND_TIMEOUT",
+            "OUTBOUND_TIMEOUT"
+          ]
         }
       },
       "title": "InBoundEvent"
@@ -3430,10 +4893,41 @@
         "server"
       ],
       "properties": {
+        "appCode": {
+          "type": "string",
+          "example": "my_bot",
+          "description": "Client App Queue Code if webhook is set for an App "
+        },
         "appId": {
           "type": "string",
           "example": "61ec7d9c2ce85742b201c5ab",
           "description": "Client App Id if webhook is set for an App "
+        },
+        "appMode": {
+          "type": "string",
+          "example": "WEBHOOK",
+          "description": "Client App mode ",
+          "enum": [
+            "AGENT",
+            "BOT",
+            "SCRIPTUS",
+            "PUSH",
+            "WEBHOOK",
+            "NONE"
+          ]
+        },
+        "appType": {
+          "type": "string",
+          "example": "FEEDBACK_V2",
+          "description": "Client App Type ",
+          "enum": [
+            "FEEDBACK_V2",
+            "BOTFLOW",
+            "APP_SCRIPT",
+            "BOT",
+            "FAQ",
+            "DEFAULT"
+          ]
         },
         "debug": {
           "type": "boolean"
@@ -3458,12 +4952,14 @@
         "audio",
         "contactId",
         "document",
+        "form",
         "from",
         "id",
         "image",
         "location",
         "messageIdExt",
         "originalMessage",
+        "referral",
         "session",
         "tags",
         "text",
@@ -3490,6 +4986,10 @@
         "document": {
           "$ref": "#/definitions/InBoundMsgMedia"
         },
+        "form": {
+          "description": "Form (Button/List/Flows) selections by user",
+          "$ref": "#/definitions/FormReply"
+        },
         "from": {
           "type": "string",
           "example": 919988776655,
@@ -3515,6 +5015,10 @@
           "type": "object",
           "example": {},
           "description": "Original Message sent by Channel :  only if modified/error by service"
+        },
+        "referral": {
+          "description": "Reference source of Inbound Message",
+          "$ref": "#/definitions/MessageReferral"
         },
         "session": {
           "$ref": "#/definitions/MsgSession"
@@ -3615,14 +5119,19 @@
     "InBoundMsgStatus": {
       "type": "object",
       "required": [
+        "contact",
         "contactId",
         "errors",
         "id",
         "messageIdExt",
+        "session",
         "status",
         "timestamp"
       ],
       "properties": {
+        "contact": {
+          "$ref": "#/definitions/InBoundContact"
+        },
         "contactId": {
           "type": "string",
           "example": "wa919988776655_918828218374",
@@ -3643,6 +5152,10 @@
           "type": "string",
           "example": 1234567,
           "description": "Unique Message Id assigined by Channel if any"
+        },
+        "session": {
+          "description": "Session information for the message",
+          "$ref": "#/definitions/MsgSession"
         },
         "status": {
           "type": "string",
@@ -3748,11 +5261,23 @@
     "MapModel": {
       "type": "object",
       "required": [
-        "first"
+        "empty",
+        "first",
+        "list",
+        "map"
       ],
       "properties": {
+        "empty": {
+          "type": "boolean"
+        },
         "first": {
           "type": "object"
+        },
+        "list": {
+          "type": "boolean"
+        },
+        "map": {
+          "type": "boolean"
         }
       },
       "title": "MapModel"
@@ -3791,6 +5316,87 @@
         }
       },
       "title": "MessagePrompt"
+    },
+    "MessageReferral": {
+      "type": "object",
+      "required": [
+        "body",
+        "bulkId",
+        "imageUrl",
+        "info",
+        "mediaType",
+        "mediaUrl",
+        "messageId",
+        "messageIdExt",
+        "sourceCategory",
+        "sourceId",
+        "sourceType",
+        "sourceUrl",
+        "thumbUrl",
+        "title"
+      ],
+      "properties": {
+        "body": {
+          "type": "string"
+        },
+        "bulkId": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "info": {
+          "type": "object"
+        },
+        "mediaType": {
+          "type": "string"
+        },
+        "mediaUrl": {
+          "type": "string"
+        },
+        "messageId": {
+          "type": "string"
+        },
+        "messageIdExt": {
+          "type": "string"
+        },
+        "sourceCategory": {
+          "type": "string",
+          "example": "campaign",
+          "description": "Category of Referral Source",
+          "enum": [
+            "message",
+            "social",
+            "ads",
+            "campaign"
+          ]
+        },
+        "sourceId": {
+          "type": "string"
+        },
+        "sourceType": {
+          "type": "string",
+          "example": "feedback",
+          "description": "Type of Referral Source",
+          "enum": [
+            "inbound",
+            "outbound",
+            "feedback",
+            "story",
+            "post"
+          ]
+        },
+        "sourceUrl": {
+          "type": "string"
+        },
+        "thumbUrl": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "title": "MessageReferral"
     },
     "MessageReportError": {
       "type": "object",
@@ -3906,6 +5512,29 @@
       },
       "title": "MessageSession"
     },
+    "MessageTimeout": {
+      "type": "object",
+      "required": [
+        "delivery",
+        "read",
+        "reply"
+      ],
+      "properties": {
+        "delivery": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "read": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "reply": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "MessageTimeout"
+    },
     "MsgChannel": {
       "type": "object",
       "required": [
@@ -4001,6 +5630,10 @@
           "type": "string",
           "description": "Email Address for email message."
         },
+        "filter": {
+          "type": "object",
+          "description": "Filter on contact profile/user/device"
+        },
         "name": {
           "type": "string",
           "description": "Name of to be used will, override the name in message"
@@ -4011,83 +5644,6 @@
         }
       },
       "title": "OutBoundContact"
-    },
-    "OutBoundMsg": {
-      "type": "object",
-      "required": [
-        "channelId",
-        "contacts",
-        "location",
-        "mask",
-        "to",
-        "type"
-      ],
-      "properties": {
-        "audio": {
-          "$ref": "#/definitions/OutBoundMsgMedia"
-        },
-        "channelId": {
-          "type": "string",
-          "example": "91SERVICENUMBER",
-          "description": "The ID that identifies the channel over which the message should be sent."
-        },
-        "contacts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CommonMsgContactCard"
-          }
-        },
-        "document": {
-          "$ref": "#/definitions/OutBoundMsgMedia"
-        },
-        "image": {
-          "$ref": "#/definitions/OutBoundMsgMedia"
-        },
-        "location": {
-          "$ref": "#/definitions/CommonMsgLocation"
-        },
-        "mask": {
-          "type": "boolean",
-          "example": false,
-          "description": "Mask the outgoing message data"
-        },
-        "options": {
-          "$ref": "#/definitions/CommonMsgOptions"
-        },
-        "template": {
-          "$ref": "#/definitions/CommonTemplateMeta"
-        },
-        "text": {
-          "$ref": "#/definitions/OutBoundMsgText"
-        },
-        "to": {
-          "description": "Either a channel-specific identifier for the receiver (e.g. MSISDN for SMS or WhatsApp channels), or email.",
-          "$ref": "#/definitions/OutBoundContact"
-        },
-        "type": {
-          "type": "string",
-          "example": "text",
-          "description": "message-type",
-          "enum": [
-            "audio",
-            "document",
-            "image",
-            "location",
-            "system",
-            "text",
-            "video",
-            "voice",
-            "contacts",
-            "template",
-            "optin",
-            "optout"
-          ]
-        },
-        "video": {
-          "$ref": "#/definitions/OutBoundMsgMedia"
-        }
-      },
-      "title": "OutBoundMsg"
     },
     "OutBoundMsgContactAddress": {
       "type": "object",
@@ -4290,6 +5846,11 @@
           "example": "your-text-message-content",
           "description": "Message Text",
           "notes": "Contains the text of the message, which can contain URLs and formatting."
+        },
+        "subject": {
+          "type": "string",
+          "example": "Email Subject",
+          "description": "Subject line for email messages"
         }
       },
       "title": "OutBoundMsgText"
@@ -4297,12 +5858,16 @@
     "OutBoundReciept": {
       "type": "object",
       "required": [
+        "campaignId",
         "id",
         "templateCode",
         "templateId",
         "type"
       ],
       "properties": {
+        "campaignId": {
+          "type": "string"
+        },
         "id": {
           "type": "string",
           "example": "gBEGkYiEB1VXAglK1ZEqA1YKPrU"
@@ -4325,12 +5890,15 @@
         "action",
         "attachments",
         "attempt",
+        "bulkSessionId",
         "campaignTitle",
+        "cancelExisting",
         "collapseId",
         "contact",
         "contacts",
         "csid",
         "files",
+        "filters",
         "footer",
         "formatSubType",
         "formatType",
@@ -4338,6 +5906,7 @@
         "fromName",
         "groupId",
         "groupName",
+        "groups",
         "hsm",
         "id",
         "lines",
@@ -4346,23 +5915,31 @@
         "messageId",
         "messageIdExt",
         "messageIdRef",
+        "messageIdResend",
+        "messageTimestamp",
         "meta",
         "model",
         "options",
         "priority",
+        "profileid",
         "prompt",
         "queue",
         "rawMessageFormat",
         "referenceKey",
+        "referral",
         "replyId",
         "replyIdExt",
+        "replyTo",
         "route",
+        "scheduler",
         "session",
+        "sessionBulkId",
         "sessionId",
         "stamps",
         "status",
         "subject",
         "templateExt",
+        "timeout",
         "timestamp",
         "to",
         "trace",
@@ -4383,8 +5960,14 @@
           "type": "integer",
           "format": "int32"
         },
+        "bulkSessionId": {
+          "type": "string"
+        },
         "campaignTitle": {
           "type": "string"
+        },
+        "cancelExisting": {
+          "type": "boolean"
         },
         "collapseId": {
           "type": "string"
@@ -4407,6 +5990,12 @@
             "$ref": "#/definitions/PostManFile"
           }
         },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "footer": {
           "type": "string"
         },
@@ -4427,6 +6016,12 @@
         },
         "groupName": {
           "type": "string"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "hsm": {
           "$ref": "#/definitions/CommonTemplateMeta"
@@ -4458,6 +6053,13 @@
         "messageIdRef": {
           "type": "string"
         },
+        "messageIdResend": {
+          "type": "string"
+        },
+        "messageTimestamp": {
+          "type": "integer",
+          "format": "int64"
+        },
         "meta": {
           "type": "object"
         },
@@ -4471,6 +6073,9 @@
           "type": "integer",
           "format": "int32"
         },
+        "profileid": {
+          "type": "string"
+        },
         "prompt": {
           "$ref": "#/definitions/MessagePrompt"
         },
@@ -4483,17 +6088,29 @@
         "referenceKey": {
           "type": "string"
         },
+        "referral": {
+          "$ref": "#/definitions/MessageReferral"
+        },
         "replyId": {
           "type": "string"
         },
         "replyIdExt": {
           "type": "string"
         },
+        "replyTo": {
+          "type": "object"
+        },
         "route": {
           "$ref": "#/definitions/MessageRouter"
         },
+        "scheduler": {
+          "$ref": "#/definitions/ChronoScheduler"
+        },
         "session": {
           "$ref": "#/definitions/MessageSession"
+        },
+        "sessionBulkId": {
+          "type": "string"
         },
         "sessionId": {
           "type": "string"
@@ -4511,6 +6128,7 @@
             "SCHLD",
             "CRTD",
             "INIT",
+            "DRFTD",
             "SENT",
             "SENT_ERR",
             "SENT_EXC",
@@ -4518,6 +6136,8 @@
             "SENTX_ERR",
             "DLVRD",
             "READ",
+            "CLKD",
+            "RPLD",
             "NSENT",
             "BLCKD",
             "LIMIT",
@@ -4525,9 +6145,12 @@
             "DELTD",
             "CCWIN",
             "RECEIVD",
+            "CONSUMED",
             "FORWARDED",
             "FORWARD_ERR",
-            "STATUS_FORWARD_ERR"
+            "STATUS_FORWARD_ERR",
+            "STOPPED",
+            "RESUMED"
           ]
         },
         "subject": {
@@ -4535,6 +6158,9 @@
         },
         "templateExt": {
           "$ref": "#/definitions/BasicExternalTemplate"
+        },
+        "timeout": {
+          "$ref": "#/definitions/MessageTimeout"
         },
         "timestamp": {
           "type": "integer",
@@ -4609,7 +6235,11 @@
       "required": [
         "date",
         "label",
-        "type"
+        "stamp",
+        "stampLocal",
+        "timeZone",
+        "type",
+        "uuid"
       ],
       "properties": {
         "date": {
@@ -4618,7 +6248,21 @@
         "label": {
           "type": "string"
         },
+        "stamp": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "stampLocal": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "timeZone": {
+          "type": "string"
+        },
         "type": {
+          "type": "string"
+        },
+        "uuid": {
           "type": "string"
         }
       },
@@ -5055,6 +6699,11 @@
           "example": "external_bot",
           "description": "Agent Code, applicable only if queue type is Agent"
         },
+        "note": {
+          "type": "string",
+          "example": "This small note briefing conversation so far",
+          "description": "Routing Note"
+        },
         "params": {
           "type": "object"
         },
@@ -5202,9 +6851,15 @@
     "TmplElement": {
       "type": "object",
       "required": [
-        "name"
+        "name",
+        "params"
       ],
       "properties": {
+        "action": {
+          "type": "string",
+          "example": "NAVIGATE",
+          "description": "Required in case of WA Flows"
+        },
         "code": {
           "type": "string",
           "example": "occupation",
@@ -5223,10 +6878,18 @@
         "name": {
           "type": "string"
         },
+        "params": {
+          "$ref": "#/definitions/TmplElementParams"
+        },
         "phone": {
           "type": "string",
           "example": "+91 9988776655",
           "description": "If type is set to PHONE_NUMBER"
+        },
+        "shorturl": {
+          "type": "string",
+          "example": "http://url",
+          "description": "If type is set to URL"
         },
         "type": {
           "type": "string",
@@ -5239,13 +6902,55 @@
             "LOCATION_REQUEST"
           ]
         },
+        "uid": {
+          "type": "string",
+          "example": 806799978207096,
+          "description": "Any UniqeId to be used"
+        },
         "url": {
           "type": "string",
           "example": "http://url",
           "description": "If type is set to URL"
+        },
+        "variable": {
+          "type": "string",
+          "example": "data.var_1",
+          "description": "dynamic variable"
         }
       },
       "title": "TmplElement"
+    },
+    "TmplElementParams": {
+      "type": "object",
+      "required": [
+        "countryCode"
+      ],
+      "properties": {
+        "countryCode": {
+          "type": "string"
+        }
+      },
+      "title": "TmplElementParams"
+    },
+    "TptInfo": {
+      "type": "object",
+      "required": [
+        "channelId",
+        "channelType",
+        "dltContentId"
+      ],
+      "properties": {
+        "channelId": {
+          "type": "string"
+        },
+        "channelType": {
+          "type": "string"
+        },
+        "dltContentId": {
+          "type": "string"
+        }
+      },
+      "title": "TptInfo"
     },
     "WebhookUrlRequest": {
       "type": "object",
